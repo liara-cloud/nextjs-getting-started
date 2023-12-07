@@ -1,6 +1,7 @@
 import connectDB from './db';
 import User from '../../models/User';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
@@ -21,8 +22,11 @@ export default async function handler(req, res) {
         return res.status(401).json({ message: 'password invalid.' });
       }
 
-      // در اینجا می‌توانید توکن یا سشن را ایجاد کنید و به کاربر اعلام ورود موفق
-      return res.status(200).json({ message: 'success login.' });
+      // ایجاد توکن با استفاده از JWT
+      const token = jwt.sign({ userId: user._id, username: user.username }, 'your-secret-key', { expiresIn: '1h' });
+
+      // ارسال توکن به کاربر به عنوان اطلاعیه ورود موفق
+      return res.status(200).json({ message: 'success login.', token });
     } catch (error) {
       console.error('Error during login:', error);
       return res.status(500).json({ message: 'error in login.' });

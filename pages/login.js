@@ -24,7 +24,7 @@ const Login = () => {
 
       if (response.ok) {
         // ورود موفقیت‌آمیز
-        router.push('/');
+        router.push('/dashboard');
       } else {
         // نمایش خطا در صورت ورود خطا
         setError(data.message);
