@@ -3,13 +3,12 @@ import React from 'react';
 import connectDB from './api/db';
 import Post from '../models/Post';
 import Layout from '../components/Dashboard_Layout.js';
-import { authenticate } from '../middlewares/auth';
 
-const Home = ({ posts, user }) => {
+const Home = ({ posts }) => {
   return (
     <Layout>
       <div>
-        <h2>Liara Blog</h2>
+        <h1>My Blog</h1>
         <ul>
           {posts.map((post) => (
             <li key={post._id}>
@@ -23,16 +22,10 @@ const Home = ({ posts, user }) => {
   );
 };
 
-export async function getServerSideProps(context) {
-  const { req, res } = context;
+export async function getServerSideProps() {
   await connectDB();
-  const session = await authenticate(req, res);
-
   const posts = await Post.find().populate('author').exec();
-
-  return {
-    props: { posts: JSON.parse(JSON.stringify(posts)), user: null },
-  };
+  return { props: { posts: JSON.parse(JSON.stringify(posts)) } };
 }
 
 export default Home;
