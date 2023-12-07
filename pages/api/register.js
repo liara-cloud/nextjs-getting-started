@@ -6,13 +6,13 @@ export default async function handler(req, res) {
   if (req.method === 'POST') {
     await connectDB();
 
-    const { username, password } = req.body;
+    const { username, password, email } = req.body;
 
     try {
-      // چک کردن تکرار نام کاربری
-      const existingUser = await User.findOne({ username });
+      // چک کردن تکرار نام کاربری یا ایمیل
+      const existingUser = await User.findOne({ $or: [{ username }, { email }] });
       if (existingUser) {
-        return res.status(400).json({ message: 'نام کاربری قبلاً استفاده شده است.' });
+        return res.status(400).json({ message: 'نام کاربری یا ایمیل قبلاً استفاده شده است.' });
       }
 
       // ایجاد یک رمز عبور هش‌شده با استفاده از bcrypt
@@ -22,6 +22,7 @@ export default async function handler(req, res) {
       const newUser = new User({
         username,
         password: hashedPassword,
+        email, // افزودن فیلد ایمیل
       });
       await newUser.save();
 
