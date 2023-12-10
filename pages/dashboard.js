@@ -15,7 +15,7 @@ const Home = ({ posts }) => {
             <li key={post._id} className={styles.postContainer}>
               <h2 className={styles.postTitle}>{post.title}</h2>
               <p className={styles.postContent}>{post.content}</p>
-              {post.image && <img src={post.image} alt={post.title} className={styles.postImage} />}
+              {post.image && <img src={`/uploads/${post.image}`} alt={post.title} className={styles.postImage} />}
             </li>
           ))}
         </ul>

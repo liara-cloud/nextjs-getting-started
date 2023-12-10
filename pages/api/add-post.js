@@ -3,7 +3,6 @@ import connectDB from './db';
 import Post from '../../models/Post';
 import multer from 'multer';
 import fs from 'fs/promises';
-import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 
 const upload = multer({ dest: 'public/uploads/' });
@@ -35,16 +34,13 @@ export default async function handler(req, res) {
       }
 
 
-      const imageFileName = `${uuidv4()}-${result.originalname}`;
-      const relativeImagePath = path.join('public/uploads/', imageFileName);
-      const absoluteImagePath = path.join(process.cwd(), relativeImagePath);
-      
+      const imageFileName = `${uuidv4()}-${result.originalname}`;      
       await fs.rename(result.path, absoluteImagePath);
       
       const newPost = new Post({
         title: req.body.title,
         content: req.body.content,
-        image: relativeImagePath.replace(/\\/g, '/').replace('public/', '')
+        image: imageFileName
       });
       
       await newPost.save();
