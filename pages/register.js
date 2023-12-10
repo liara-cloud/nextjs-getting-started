@@ -31,7 +31,7 @@ const Register = () => {
 
       if (response.ok) {
         // ثبت‌نام موفقیت‌آمیز
-        router.push('/login');
+        router.push('/dashboard');
       } else {
         // نمایش خطا در صورت ثبت‌نام ناموفق
         setError(data.message);
