@@ -1,9 +1,11 @@
 // pages/add-post.js
 import { useState } from 'react';
-import Layout from '../components/Layout';
+import Layout from '../components/inLayout';
 import styles from '../styles/add-post.module.css';
+import { useRouter } from 'next/router';
 
 const AddPostPage = () => {
+  const router = useRouter();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [image, setImage] = useState(null);

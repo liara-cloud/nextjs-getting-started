@@ -3,20 +3,19 @@ import React from 'react';
 import connectDB from './api/db';
 import Post from '../models/Post';
 import Layout from '../components/inLayout';
+import styles from '../styles/showpost.module.css';
 
 const Home = ({ posts }) => {
   return (
     <Layout>
       <div>
-        <h1>My Blog</h1>
+        <h1>Liara Blog</h1>
         <ul>
           {posts.map((post) => (
-            <li key={post._id}>
-              <h2>{post.title}</h2>
-              <p>{post.content}</p>
-              <p>{post.image}</p>
-              {/* افزودن تصویر به پست */}
-              {post.image && <img src={post.image} alt={post.title} />}
+            <li key={post._id} className={styles.postContainer}>
+              <h2 className={styles.postTitle}>{post.title}</h2>
+              <p className={styles.postContent}>{post.content}</p>
+              {post.image && <img src={post.image} alt={post.title} className={styles.postImage} />}
             </li>
           ))}
         </ul>

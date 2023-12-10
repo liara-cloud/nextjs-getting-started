@@ -6,7 +6,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 
-const upload = multer({ dest: 'uploads/' });
+const upload = multer({ dest: 'public/uploads/' });
 
 export const config = {
   api: {
@@ -36,7 +36,7 @@ export default async function handler(req, res) {
 
 
       const imageFileName = `${uuidv4()}-${result.originalname}`;
-      const relativeImagePath = path.join('uploads', imageFileName);
+      const relativeImagePath = path.join('public/uploads/', imageFileName);
       const absoluteImagePath = path.join(process.cwd(), relativeImagePath);
       
       await fs.rename(result.path, absoluteImagePath);
@@ -44,7 +44,7 @@ export default async function handler(req, res) {
       const newPost = new Post({
         title: req.body.title,
         content: req.body.content,
-        image: `./${relativeImagePath.replace(/\\/g, '/')}`, // استفاده از مسیر نسبی در پراپرتی image
+        image: relativeImagePath.replace(/\\/g, '/').replace('public/', '')
       });
       
       await newPost.save();
@@ -52,9 +52,6 @@ export default async function handler(req, res) {
       return res.status(201).json({ message: 'پست با موفقیت ارسال شد.' });
     } catch (error) {
       console.error('Error during post creation:', error);
-
-      // در اینجا کد unlink حذف شده است
-
       return res.status(500).json({ message: 'خطا در ایجاد پست.' });
     }
   }

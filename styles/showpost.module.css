@@ -1,0 +1,27 @@
+/* showpost.module.css */
+
+.postContainer {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    padding: 16px;
+  }
+  
+  .postTitle {
+    font-size: 24px;
+    margin-bottom: 8px;
+    color: #333; /* رنگ title */
+  }
+  
+  .postContent {
+    font-size: 16px;
+    color: #555; /* رنگ content */
+  }
+  
+  .postImage {
+    max-width: 100%;
+    border-radius: 8px;
+    margin-top: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* سایه برای عکس */
+  }
+  
