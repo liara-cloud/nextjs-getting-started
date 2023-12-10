@@ -8,7 +8,6 @@ const Logout = () => {
 
   useEffect(() => {
     const handleLogout = async () => {
-      await signOut(); // اجرای عملیات logout
       router.push('/'); // هدایت به صفحه اصلی
     };
 
