@@ -1,6 +1,7 @@
 import connectDB from './db';
 import User from '../../models/User';
 import bcrypt from 'bcrypt';
+import nodemailer from 'nodemailer';
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
@@ -22,9 +23,12 @@ export default async function handler(req, res) {
       const newUser = new User({
         username,
         password: hashedPassword,
-        email, // افزودن فیلد ایمیل
+        email,
       });
       await newUser.save();
+
+      // ارسال ایمیل خوشامدگویی
+      await sendWelcomeEmail(email);
 
       // در اینجا می‌توانید توکن یا سشن را ایجاد کنید و به کاربر اعلام ثبت‌نام موفق
       return res.status(201).json({ message: 'ثبت‌نام موفقیت‌آمیز.' });
@@ -36,4 +40,28 @@ export default async function handler(req, res) {
 
   // ارسال درخواست غیر مجاز
   return res.status(405).json({ message: 'متد غیر مجاز.' });
+}
+
+async function sendWelcomeEmail(userEmail) {
+  // اطلاعات مربوط به ایمیل خود را وارد کنید
+  const transporter = nodemailer.createTransport({
+    host: 'smtp.c1.liara.email',
+    port: 587,
+    secure: false,
+    auth: {
+      user: 'relaxed_edison_ddmlfo',
+      pass: '7eb29b13-375b-429c-949d-09a6c0affdcc',
+    },
+  });
+
+  // محتوای ایمیل خوشامدگویی
+  const mailOptions = {
+    from: 'info@alinajmabadi.ir',
+    to: userEmail,
+    subject: 'خوش آمدگویی به وب‌سایت',
+    text: 'به وب‌سایت خوش آمدید. امیدواریم که از خدمات ما لذت ببرید.',
+  };
+
+  // ارسال ایمیل
+  await transporter.sendMail(mailOptions);
 }
