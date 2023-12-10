@@ -21,7 +21,7 @@ const Layout = ({ children }) => {
       </header>
       <main>{children}</main>
       <footer>
-        <p>&copy; 2023 Liara Blog</p>
+        <p><Link href="https://liara.ir">&copy;</Link> 2023 Liara Blog</p>
       </footer>
     </div>
   );
