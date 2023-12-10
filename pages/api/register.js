@@ -10,16 +10,13 @@ export default async function handler(req, res) {
     const { username, password, email } = req.body;
 
     try {
-      // چک کردن تکرار نام کاربری یا ایمیل
       const existingUser = await User.findOne({ $or: [{ username }, { email }] });
       if (existingUser) {
-        return res.status(400).json({ message: 'نام کاربری یا ایمیل قبلاً استفاده شده است.' });
+        return res.status(400).json({ message: 'this username or email already exists' });
       }
 
-      // ایجاد یک رمز عبور هش‌شده با استفاده از bcrypt
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      // ثبت نام کاربر جدید
       const newUser = new User({
         username,
         password: hashedPassword,
@@ -27,41 +24,38 @@ export default async function handler(req, res) {
       });
       await newUser.save();
 
-      // ارسال ایمیل خوشامدگویی
       await sendWelcomeEmail(email);
 
-      // در اینجا می‌توانید توکن یا سشن را ایجاد کنید و به کاربر اعلام ثبت‌نام موفق
-      return res.status(201).json({ message: 'ثبت‌نام موفقیت‌آمیز.' });
+      return res.status(201).json({ message: 'signup successfull' });
     } catch (error) {
       console.error('Error during registration:', error);
-      return res.status(500).json({ message: 'خطا در ثبت‌نام.' });
+      return res.status(500).json({ message: 'error in signup.' });
     }
   }
 
-  // ارسال درخواست غیر مجاز
-  return res.status(405).json({ message: 'متد غیر مجاز.' });
+  return res.status(405).json({ message: 'forbidden method' });
 }
 
 async function sendWelcomeEmail(userEmail) {
-  // اطلاعات مربوط به ایمیل خود را وارد کنید
+  
   const transporter = nodemailer.createTransport({
-    host: 'smtp.c1.liara.email',
-    port: 587,
+    host: process.env.EMAIL_HOST,
+    port: process.env.EMAIL_PORT,
     secure: false,
     auth: {
-      user: 'relaxed_edison_ddmlfo',
-      pass: '7eb29b13-375b-429c-949d-09a6c0affdcc',
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
     },
   });
 
-  // محتوای ایمیل خوشامدگویی
+  
   const mailOptions = {
-    from: 'info@alinajmabadi.ir',
+    from: process.env.EMAIL_FROM,
     to: userEmail,
-    subject: 'خوش آمدگویی به وب‌سایت',
-    text: 'به وب‌سایت خوش آمدید. امیدواریم که از خدمات ما لذت ببرید.',
+    subject: 'Welcome to Liara Blog',
+    text: 'Thank you for joining in our blog. to contact us, just reply this email.',
   };
 
-  // ارسال ایمیل
+  
   await transporter.sendMail(mailOptions);
 }
