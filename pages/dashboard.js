@@ -14,6 +14,9 @@ const Home = ({ posts }) => {
             <li key={post._id}>
               <h2>{post.title}</h2>
               <p>{post.content}</p>
+              <p>{post.image}</p>
+              {/* افزودن تصویر به پست */}
+              {post.image && <img src={post.image} alt={post.title} />}
             </li>
           ))}
         </ul>
