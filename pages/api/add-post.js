@@ -36,7 +36,6 @@ export default async function handler(req, res) {
 
       const imageFileName = `${uuidv4()}-${result.originalname}`;      
       await fs.rename(result.path, `public/uploads/${imageFileName}`);
-      console.log(result.path)
 
       const newPost = new Post({
         title: req.body.title,
