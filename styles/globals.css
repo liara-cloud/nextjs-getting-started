@@ -1,0 +1,29 @@
+/* styles/styles.css */
+
+body {
+  background-color: #ffffff; /* سفید */
+  color: #000000; /* سیاه */
+}
+
+h1 {
+  color: #000000; /* سیاه */
+}
+
+.upload-container {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.upload-button {
+  background-color: #000000; /* سیاه */
+  color: #ffffff; /* سفید */
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+}
+
+.error-message {
+  color: #ff0000; /* قرمز */
+}
