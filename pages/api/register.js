@@ -1,11 +1,7 @@
 import connectDB from './db';
 import User from '../../models/User';
 import bcrypt from 'bcrypt';
-<<<<<<< HEAD
-import jwt from 'jsonwebtoken';
-=======
 import nodemailer from 'nodemailer';
->>>>>>> upload-using-s3
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
@@ -28,17 +24,9 @@ export default async function handler(req, res) {
       });
       await newUser.save();
 
-<<<<<<< HEAD
-      // ایجاد توکن با استفاده از JWT
-      const token = jwt.sign({ userId: newUser._id, username: newUser.username }, 'your-secret-key', { expiresIn: '1h' });
-
-      // ارسال توکن به کاربر
-      return res.status(201).json({ message: 'ثبت‌نام موفقیت‌آمیز.', token });
-=======
       await sendWelcomeEmail(email);
 
       return res.status(201).json({ message: 'signup successfull' });
->>>>>>> upload-using-s3
     } catch (error) {
       console.error('Error during registration:', error);
       return res.status(500).json({ message: 'error in signup.' });
