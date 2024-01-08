@@ -16,5 +16,11 @@ $ liara deploy
 
 ## liara.json File
 
-in liara.json file, we can define app-name and platform of the project
+In liara.json file, we can define app-name and platform of the project, for example:
+```json
+{
+    "platform": "next",
+    "app": "nextjs-app1"
+}
+```
 
