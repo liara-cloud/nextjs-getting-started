@@ -13,4 +13,8 @@ $ cd nextjs-getting-started
 
 $ liara deploy
 ```
-## Availabe Branches
+
+## liara.json File
+
+in liara.json file, we can define app-name and platform type of project
+
