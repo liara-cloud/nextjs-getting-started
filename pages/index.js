@@ -20,13 +20,13 @@ const Upload = () => {
       }
 
       const s3 = new S3({
-        accessKeyId: process.env.BUCKET_ACCESS_KEY,
-        secretAccessKey: process.env.BUCKET_SECRET_KEY,
-        endpoint: `https://${process.env.BUCKET_ENDPOINT}`,
+        accessKeyId: 'your-access-key',
+        secretAccessKey: 'your-secret-key',
+        endpoint: 'https://storage.iran.liara.space',
       });
 
       const params = {
-        Bucket: process.env.BUCKET_NAME,
+        Bucket: 'your-bucket-name',
         Key: file.name,
         Body: file,
       };
@@ -34,7 +34,7 @@ const Upload = () => {
       const response = await s3.upload(params).promise();      
       // temporary link for 1 hour
       const signedUrl = s3.getSignedUrl('getObject', {
-          Bucket: process.env.BUCKET_NAME,
+          Bucket: 'bucit',
           Key: file.name,
           Expires: 3600, 
         });
@@ -49,7 +49,6 @@ const Upload = () => {
   return (
     <div className="upload-container">
       <h1>Upload File to S3</h1>
-      <p>{process.env.BUCKET_ENDPOINT}</p>
       <input type="file" onChange={handleFileChange} />
       <button className="upload-button" onClick={handleUpload} disabled={!file}>
         Upload
@@ -58,7 +57,7 @@ const Upload = () => {
         <h3 className="success-message">
           File uploaded successfully. Link: <a href={uploadLink}>Temporary Link</a>
           <br></br>
-          If you're using public bucket, you can also have: <a href={`https://${process.env.BUCKET_NAME}.${process.env.BUCKET_ENDPOINT}/${imageFileName}`}>Permanent Link</a>
+          If you're using public bucket, you can also have: <a href={`https://bucit.storage.iran.liara.space/${file.name}`}>Permanent Link</a>
         </h3>
       )}
       {error && <p className="error-message">{error}</p>}
