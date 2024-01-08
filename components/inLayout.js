@@ -6,22 +6,22 @@ const Layout = ({ children }) => {
     <div>
       <header>
         <nav>
-          <Link href="/">
+          <Link href="/dashboard">
             Home
           </Link>{' '}
           |{' '}
-          <Link href="/login">
-            Login
+          <Link href="/add-post">
+            Add Post
           </Link>{' '}
           |{' '}
-          <Link href="/register">
-            Register
+          <Link href="/logout">
+            LogOut
           </Link>
         </nav>
       </header>
       <main>{children}</main>
       <footer>
-        <p><Link href="https://liara.ir">&copy;</Link> 2023 Liara Blog</p>
+      <p><Link href="https://liara.ir">&copy;</Link> 2023 Liara Blog</p>
       </footer>
     </div>
   );

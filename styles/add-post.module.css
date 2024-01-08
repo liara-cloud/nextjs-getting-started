@@ -1,0 +1,41 @@
+/* add-post.module.css */
+.addPostContainer {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .formLabel {
+    display: block;
+    margin-bottom: 8px;
+  }
+  
+  .formInput,
+  .formTextarea,
+  .formButton {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .formTextarea {
+    resize: vertical;
+  }
+  
+  .formButton {
+    background-color: #4caf50;
+    color: #fff;
+    cursor: pointer;
+  }
+  
+  .formButton:hover {
+    background-color: #45a049;
+  }
+  
+  

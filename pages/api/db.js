@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 
 const connectDB = async () => {
   try {
-    await mongoose.connect("mongodb://root:4QHgSwuuT7kbjMoLiNYU6lmg@alfie.iran.liara.ir:32741/my-app?authSource=admin", {
+    await mongoose.connect(process.env.MONGODB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
