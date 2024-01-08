@@ -2,10 +2,10 @@
 import connectDB from './db';
 import Post from '../../models/Post';
 import multer from 'multer';
-import fs from 'fs/promises';
 import { v4 as uuidv4 } from 'uuid';
+import { S3 } from 'aws-sdk';
 
-const upload = multer({ dest: 'public/uploads/' });
+const upload = multer();
 
 export const config = {
   api: {
@@ -33,16 +33,27 @@ export default async function handler(req, res) {
         return res.status(400).json({ message: 'تصویری انتخاب نشده است.' });
       }
 
+      const s3 = new S3({
+        accessKeyId: process.env.BUCKET_ACCESS_KEY,
+        secretAccessKey: process.env.BUCKET_SECRET_KEY,
+        endpoint: `https://${process.env.BUCKET_ENDPOINT}`,
+      });
 
-      const imageFileName = `${uuidv4()}-${result.originalname}`;      
-      await fs.rename(result.path, `public/uploads/${imageFileName}`);
+      const imageFileName = `${uuidv4()}-${result.originalname}`;
+      const params = {
+        Bucket: process.env.BUCKET_NAME,
+        Key: imageFileName,
+        Body: result.buffer, // Use buffer instead of path
+      };
+
+      await s3.upload(params).promise();
 
       const newPost = new Post({
         title: req.body.title,
         content: req.body.content,
-        image: imageFileName
+        image: `https://${process.env.BUCKET_NAME}.${process.env.BUCKET_ENDPOINT}/${imageFileName}`,
       });
-      
+
       await newPost.save();
 
       return res.status(201).json({ message: 'پست با موفقیت ارسال شد.' });
