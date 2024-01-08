@@ -16,5 +16,5 @@ $ liara deploy
 
 ## liara.json File
 
-in liara.json file, we can define app-name and platform type of project
+in liara.json file, we can define app-name and platform of the project
 
