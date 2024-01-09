@@ -1,15 +1,54 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { S3 } from 'aws-sdk';
 
 const Upload = () => {
   const [file, setFile] = useState(null);
   const [error, setError] = useState(null);
-  const [uploadLink, setUploadLink] = useState(null); 
+  const [uploadLink, setUploadLink] = useState(null);
+  const [permanentLink, setPermanentLink] = useState(null);
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [allFiles, setAllFiles] = useState([]);
+  const [buckets, setBuckets] = useState([]);
+
+  const fetchBuckets = async () => {
+    const s3 = new S3({
+      accessKeyId: process.env.LIARA_ACCESS_KEY,
+      secretAccessKey: process.env.LIARA_SECRET_KEY,
+      endpoint: process.env.LIARA_ENDPOINT,
+    });
+    try {
+      const response = await s3.listBuckets().promise();
+      setBuckets(response.Buckets);
+    } catch (error) {
+      console.error('Error fetching buckets: ', error);
+    }
+  };
+
+  const fetchAllFiles = async () => {
+    const s3 = new S3({
+      accessKeyId: process.env.LIARA_ACCESS_KEY,
+      secretAccessKey: process.env.LIARA_SECRET_KEY,
+      endpoint: process.env.LIARA_ENDPOINT,
+    });
+
+    try {
+      const response = await s3.listObjectsV2({ Bucket: process.env.LIARA_BUCKET_NAME }).promise();
+      setAllFiles(response.Contents);
+    } catch (error) {
+      console.error('Error fetching files: ', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchBuckets();
+    fetchAllFiles();
+  }, [uploadLink]);
 
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
     setError(null);
-    setUploadLink(null); 
+    setUploadLink(null);
+    setPermanentLink(null);
   };
 
   const handleUpload = async () => {
@@ -20,29 +59,71 @@ const Upload = () => {
       }
 
       const s3 = new S3({
-        accessKeyId: 'your-access-key',
-        secretAccessKey: 'your-secret-key',
-        endpoint: 'https://storage.iran.liara.space',
+        accessKeyId: process.env.LIARA_ACCESS_KEY,
+        secretAccessKey: process.env.LIARA_SECRET_KEY,
+        endpoint: process.env.LIARA_ENDPOINT,
       });
 
       const params = {
-        Bucket: 'your-bucket-name',
+        Bucket: process.env.LIARA_BUCKET_NAME,
         Key: file.name,
         Body: file,
       };
 
-      const response = await s3.upload(params).promise();      
-      // temporary link for 1 hour
+      const response = await s3.upload(params).promise();
       const signedUrl = s3.getSignedUrl('getObject', {
-          Bucket: 'bucit',
-          Key: file.name,
-          Expires: 3600, 
-        });
-            setUploadLink(signedUrl);
+        Bucket: process.env.LIARA_BUCKET_NAME,
+        Key: file.name,
+        Expires: 3600,
+      });
+
+      setUploadLink(signedUrl);
+
+      // Get permanent link
+      const permanentSignedUrl = s3.getSignedUrl('getObject', {
+        Bucket: process.env.LIARA_BUCKET_NAME,
+        Key: file.name,
+        Expires: 31536000, // 1 year
+      });
+      setPermanentLink(permanentSignedUrl);
+
+      // Update list of uploaded files
+      setUploadedFiles((prevFiles) => [...prevFiles, response]);
+
+      // Update list of all files
+      fetchAllFiles();
 
       console.log('File uploaded successfully');
     } catch (error) {
       setError('Error uploading file: ' + error.message);
+    }
+  };
+
+  const handleShowFiles = () => {
+    console.log('List of uploaded files:', uploadedFiles);
+  };
+
+  const handleDeleteFile = async (file) => {
+    try {
+      const s3 = new S3({
+        accessKeyId: process.env.LIARA_ACCESS_KEY,
+        secretAccessKey: process.env.LIARA_SECRET_KEY,
+        endpoint: process.env.LIARA_ENDPOINT,
+      });
+
+      await s3.deleteObject({ Bucket: process.env.LIARA_BUCKET_NAME, Key: file.Key }).promise();
+
+      // Update the list of uploaded files
+      setUploadedFiles((prevFiles) =>
+        prevFiles.filter((uploadedFile) => uploadedFile.Key !== file.Key)
+      );
+
+      // Update list of all files
+      fetchAllFiles();
+
+      console.log('File deleted successfully');
+    } catch (error) {
+      console.error('Error deleting file: ', error);
     }
   };
 
@@ -55,14 +136,101 @@ const Upload = () => {
       </button>
       {uploadLink && (
         <h3 className="success-message">
-          File uploaded successfully. Link: <a href={uploadLink}>Temporary Link</a>
-          <br></br>
-          If you're using public bucket, you can also have: <a href={`https://bucit.storage.iran.liara.space/${file.name}`}>Permanent Link</a>
+          File uploaded successfully. Temporary Link:{' '}
+          <a href={uploadLink} target="_blank" rel="noopener noreferrer">
+            Temporary Link
+          </a>
         </h3>
       )}
+      {permanentLink && (
+        <h3 className="success-message">
+          Permanent Link:{' '}
+          <a href={permanentLink} target="_blank" rel="noopener noreferrer">
+            Permanent Link
+          </a>
+        </h3>
+      )}
+      <button className="show-files-button" onClick={handleShowFiles}>
+        Show Uploaded Files
+      </button>
+      {uploadedFiles.length > 0 && (
+        <div>
+          <h2>Uploaded Files:</h2>
+          <ul>
+            {uploadedFiles.map((uploadedFile) => {
+              const s3 = new S3({
+                accessKeyId: process.env.LIARA_ACCESS_KEY,
+                secretAccessKey: process.env.LIARA_SECRET_KEY,
+                endpoint: process.env.LIARA_ENDPOINT,
+              });
+
+              return (
+                <li key={uploadedFile.Key}>
+                  {uploadedFile.Key}{' '}
+                  <a
+                    href={s3.getSignedUrl('getObject', {
+                      Bucket: process.env.LIARA_BUCKET_NAME,
+                      Key: uploadedFile.Key,
+                      Expires: 3600,
+                    })}
+                    download
+                  >
+                    Download
+                  </a>{' '}
+                  <button onClick={() => handleDeleteFile(uploadedFile)}>
+                    Delete
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
+      {allFiles.length > 0 && (
+        <div>
+          <h2>All Files:</h2>
+          <ul>
+            {allFiles.map((file) => {
+              const s3 = new S3({
+                accessKeyId: process.env.LIARA_ACCESS_KEY,
+                secretAccessKey: process.env.LIARA_SECRET_KEY,
+                endpoint: process.env.LIARA_ENDPOINT,
+              });
+
+              return (
+                <li key={file.Key}>
+                  {file.Key}{' '}
+                  <a
+                    href={s3.getSignedUrl('getObject', {
+                      Bucket: process.env.LIARA_BUCKET_NAME,
+                      Key: file.Key,
+                      Expires: 3600,
+                    })}
+                    download
+                  >
+                    Download
+                  </a>{' '}
+                  <button onClick={() => handleDeleteFile(file)}>
+                    Delete
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
       {error && <p className="error-message">{error}</p>}
+      <div>
+        <h2>Buckets:</h2>
+        <ul>
+          {buckets.map((bucket) => (
+            <li key={bucket.Name}>{bucket.Name}</li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };
+
 
 export default Upload;
