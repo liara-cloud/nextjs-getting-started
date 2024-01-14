@@ -13,7 +13,18 @@ $ cd nextjs-getting-started
 
 $ liara deploy
 ```
-## Upload file using S3 access
-set your specific values of bucket-name, access-key and secret-key to use this app:
-
+## Managing Bucket Using S3 - step by step
+```
+npm install
+ ```
+- set your bucket informations in pages/index.js
+- or rename .env.example file to .env, then set your ENVs
+``` npm run dev ``` 
+### first look of projetc
 <img src='https://files.liara.ir/liara/nextjs/upload-file-using-s3-nextjs.png'>
+
+### features
+- upload file using s3
+- download file using s3
+- share links of uploaded files
+- remove file from bucket using s3
