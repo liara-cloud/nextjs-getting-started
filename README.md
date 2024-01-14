@@ -21,7 +21,7 @@ npm install
 - or rename .env.example file to .env, then set your ENVs
 ``` npm run dev ``` 
 ### First look of projetc
-<img src="https://files.liara.ir/liara/nextjs/upload-file-using-s3-nextjs.png" alt="first look of nextjs-s3">
+<img src="https://files.liara.ir/liara/nextjs/upload-file-using-s3-nextjs-bucket.png" alt="first look of nextjs-s3">
 
 ### Features
 - upload file using s3
