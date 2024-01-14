@@ -1,3 +1,5 @@
+// pages/index.js
+
 import { useState } from 'react';
 
 export default function Home() {
@@ -6,6 +8,8 @@ export default function Home() {
     subject: '',
     text: '',
   });
+
+  const [successMessage, setSuccessMessage] = useState(null);
 
   const handleInputChange = (e) => {
     setEmailData({ ...emailData, [e.target.name]: e.target.value });
@@ -24,7 +28,7 @@ export default function Home() {
       });
 
       if (response.ok) {
-        console.log('Email sent successfully!');
+        setSuccessMessage('Email sent successfully!');
       } else {
         console.error('Failed to send email:', await response.json());
       }
@@ -35,7 +39,7 @@ export default function Home() {
 
   return (
     <div>
-      <h1>Send Email</h1>
+      <h1 style={{textAlign: "center"}}>Send Email</h1>
       <form onSubmit={handleSubmit}>
         <label>
           To:
@@ -54,6 +58,8 @@ export default function Home() {
         <br />
         <button type="submit">Send Email</button>
       </form>
+
+      {successMessage && <p style={{ color: 'green', textAlign: 'center', marginTop: '10px' }}>{successMessage}</p>}
     </div>
   );
 }
