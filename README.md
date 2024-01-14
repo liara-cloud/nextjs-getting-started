@@ -20,10 +20,10 @@ npm install
 - set your bucket informations in pages/index.js
 - or rename .env.example file to .env, then set your ENVs
 ``` npm run dev ``` 
-### first look of projetc
-<img src='https://files.liara.ir/liara/nextjs/upload-file-using-s3-nextjs.png'>
+### First look of projetc
+<img src="https://files.liara.ir/liara/nextjs/upload-file-using-s3-nextjs.png" alt="first look of nextjs-s3">
 
-### features
+### Features
 - upload file using s3
 - download file using s3
 - share links of uploaded files
