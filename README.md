@@ -18,8 +18,10 @@ $ liara deploy
 npm install
  ```
 - set your bucket informations in pages/index.js
-- or rename .env.example file to .env, then set your ENVs
-``` npm run dev ``` 
+- or rename .env.example file to .env, then set your ENVs and use ENV variables in pages/index.js
+```
+ npm run dev
+ ``` 
 ### First look of projetc
 <img src="https://files.liara.ir/liara/nextjs/upload-file-using-s3-nextjs-bucket.png" alt="first look of nextjs-s3">
 
