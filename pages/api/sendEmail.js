@@ -13,19 +13,19 @@ export default async function handler(req, res) {
 
   // Create a nodemailer transporter using your SMTP credentials
   const transporter = nodemailer.createTransport({
-    host: 'smtp.c1.liara.email',
+    host: process.env.EMAIL_HOST,
     port: 587,
     secure: false,
     auth: {
-      user: 'xenodochial_ellis_6rrt96',
-      pass: '9f6e2aed-2e10-436c-b367-d061ddfcc925',
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
     },
   });
 
   try {
     // Send email
     const info = await transporter.sendMail({
-      from: 'info@alinajmabadi.ir',
+      from: process.env.EMAIL_FROM,
       to,
       subject,
       text,
