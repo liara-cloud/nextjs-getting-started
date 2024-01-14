@@ -9,12 +9,17 @@ const Upload = () => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [allFiles, setAllFiles] = useState([]);
   const [buckets, setBuckets] = useState([]);
-
+  
+  const ACCESSKEY = 'your-access-key';                    // or process.env.LIARA_ACCESS_KEY;
+  const SECRETKEY = 'your-secret-ky';                    //  or process.env.LIARA_SECRET_KEY;
+  const ENDPOINT  = 'https://storage.iran.liara.space'; //   or process.env.LIARA_ENDPOINT;
+  const BUCKET    = 'your-bucket-name';                //    or process.env.LIARA_BUCKET_NAME;
+  
   const fetchBuckets = async () => {
     const s3 = new S3({
-      accessKeyId: process.env.LIARA_ACCESS_KEY,
-      secretAccessKey: process.env.LIARA_SECRET_KEY,
-      endpoint: process.env.LIARA_ENDPOINT,
+      accessKeyId: ACCESSKEY,
+      secretAccessKey: SECRETKEY,
+      endpoint: ENDPOINT,
     });
     try {
       const response = await s3.listBuckets().promise();
@@ -26,13 +31,13 @@ const Upload = () => {
 
   const fetchAllFiles = async () => {
     const s3 = new S3({
-      accessKeyId: process.env.LIARA_ACCESS_KEY,
-      secretAccessKey: process.env.LIARA_SECRET_KEY,
-      endpoint: process.env.LIARA_ENDPOINT,
+      accessKeyId: ACCESSKEY,
+      secretAccessKey: SECRETKEY,
+      endpoint: ENDPOINT,
     });
 
     try {
-      const response = await s3.listObjectsV2({ Bucket: process.env.LIARA_BUCKET_NAME }).promise();
+      const response = await s3.listObjectsV2({ Bucket: BUCKET }).promise();
       setAllFiles(response.Contents);
     } catch (error) {
       console.error('Error fetching files: ', error);
@@ -59,20 +64,20 @@ const Upload = () => {
       }
 
       const s3 = new S3({
-        accessKeyId: process.env.LIARA_ACCESS_KEY,
-        secretAccessKey: process.env.LIARA_SECRET_KEY,
-        endpoint: process.env.LIARA_ENDPOINT,
+        accessKeyId: ACCESSKEY,
+        secretAccessKey: SECRETKEY,
+        endpoint: ENDPOINT,
       });
 
       const params = {
-        Bucket: process.env.LIARA_BUCKET_NAME,
+        Bucket: BUCKET,
         Key: file.name,
         Body: file,
       };
 
       const response = await s3.upload(params).promise();
       const signedUrl = s3.getSignedUrl('getObject', {
-        Bucket: process.env.LIARA_BUCKET_NAME,
+        Bucket: BUCKET,
         Key: file.name,
         Expires: 3600,
       });
@@ -81,7 +86,7 @@ const Upload = () => {
 
       // Get permanent link
       const permanentSignedUrl = s3.getSignedUrl('getObject', {
-        Bucket: process.env.LIARA_BUCKET_NAME,
+        Bucket: BUCKET,
         Key: file.name,
         Expires: 31536000, // 1 year
       });
@@ -106,12 +111,12 @@ const Upload = () => {
   const handleDeleteFile = async (file) => {
     try {
       const s3 = new S3({
-        accessKeyId: process.env.LIARA_ACCESS_KEY,
-        secretAccessKey: process.env.LIARA_SECRET_KEY,
-        endpoint: process.env.LIARA_ENDPOINT,
+        accessKeyId: ACCESSKEY,
+        secretAccessKey: SECRETKEY,
+        endpoint: ENDPOINT,
       });
 
-      await s3.deleteObject({ Bucket: process.env.LIARA_BUCKET_NAME, Key: file.Key }).promise();
+      await s3.deleteObject({ Bucket: BUCKET, Key: file.Key }).promise();
 
       // Update the list of uploaded files
       setUploadedFiles((prevFiles) =>
@@ -159,9 +164,9 @@ const Upload = () => {
           <ul>
             {uploadedFiles.map((uploadedFile) => {
               const s3 = new S3({
-                accessKeyId: process.env.LIARA_ACCESS_KEY,
-                secretAccessKey: process.env.LIARA_SECRET_KEY,
-                endpoint: process.env.LIARA_ENDPOINT,
+                accessKeyId: ACCESSKEY,
+                secretAccessKey: SECRETKEY,
+                endpoint: ENDPOINT,
               });
 
               return (
@@ -169,7 +174,7 @@ const Upload = () => {
                   {uploadedFile.Key}{' '}
                   <a
                     href={s3.getSignedUrl('getObject', {
-                      Bucket: process.env.LIARA_BUCKET_NAME,
+                      Bucket: BUCKET,
                       Key: uploadedFile.Key,
                       Expires: 3600,
                     })}
@@ -192,9 +197,9 @@ const Upload = () => {
           <ul>
             {allFiles.map((file) => {
               const s3 = new S3({
-                accessKeyId: process.env.LIARA_ACCESS_KEY,
-                secretAccessKey: process.env.LIARA_SECRET_KEY,
-                endpoint: process.env.LIARA_ENDPOINT,
+                accessKeyId: ACCESSKEY,
+                secretAccessKey: SECRETKEY,
+                endpoint: ENDPOINT,
               });
 
               return (
@@ -202,7 +207,7 @@ const Upload = () => {
                   {file.Key}{' '}
                   <a
                     href={s3.getSignedUrl('getObject', {
-                      Bucket: process.env.LIARA_BUCKET_NAME,
+                      Bucket: BUCKET,
                       Key: file.Key,
                       Expires: 3600,
                     })}
