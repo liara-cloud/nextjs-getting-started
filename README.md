@@ -14,3 +14,7 @@ $ cd nextjs-getting-started
 $ liara deploy
 ```
 ## Availabe Branches
+- [liaraJson](https://github.com/liara-cloud/nextjs-getting-started/tree/liaraJson)
+- [Object Storage](https://github.com/liara-cloud/nextjs-getting-started/tree/object-storage)
+- [Email Server](https://github.com/liara-cloud/nextjs-getting-started/tree/sendEmail)
+- [NextJS Blog](https://github.com/liara-cloud/nextjs-getting-started/tree/blog)
