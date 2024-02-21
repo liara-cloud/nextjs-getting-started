@@ -3,7 +3,8 @@ import MyAnimation from '../components/MyAnimation';
 function Home() {
   return (
     <div>
-      <MyAnimation />
+      <h1>{process.env.NEXT_PUBLIC_liara_url}</h1>
+      <MyAnimation/>
     </div>
   );
 }

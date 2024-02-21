@@ -282,7 +282,6 @@ export default function MyAnimation() {
                 /* Import the global styles */
                 @import 'styles/global.css';
             `}</style>
-            <h1>Hooray!</h1>
             <canvas id="drawing_canvas"></canvas>
         </div>
     );
