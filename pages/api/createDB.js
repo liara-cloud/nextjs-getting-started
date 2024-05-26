@@ -1,0 +1,94 @@
+// pages/index.js
+import { useState, useEffect } from 'react';
+
+export default function Home() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [databaseExists, setDatabaseExists] = useState(false);
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    checkDatabaseExistence();
+    fetchUsers();
+  }, []);
+
+  const checkDatabaseExistence = async () => {
+    const response = await fetch('/api/checkDB');
+    const data = await response.json();
+    setDatabaseExists(data.exists);
+  };
+
+  const fetchUsers = async () => {
+    const response = await fetch('/api/getUsers');
+    const data = await response.json();
+    setUsers(data.users);
+  };
+
+  const handleCreateDB = async () => {
+    const response = await fetch('/api/createDB');
+    const data = await response.json();
+    setMessage(data.message);
+    setDatabaseExists(true);
+  };
+
+  const handleAddData = async (event) => {
+    event.preventDefault();
+    const response = await fetch('/api/addData', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name, email }),
+    });
+    const data = await response.json();
+    setMessage(data.message);
+    fetchUsers();
+    setName('');
+    setEmail('');
+  };
+
+  return (
+    <div>
+      <h1>SQLite Database Operations</h1>
+      {!databaseExists ? (
+        <p>Database not created yet. Please create the database.</p>
+      ) : (
+        <>
+          <form onSubmit={handleAddData}>
+            <label>
+              Name:
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </label>
+            <label>
+              Email:
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </label>
+            <button type="submit">Add Data</button>
+          </form>
+          {message && <p>{message}</p>}
+          <h2>Users</h2>
+          <ul>
+            {users.map((user, index) => (
+              <li key={index}>
+                <strong>Name:</strong> {user.name}, <strong>Email:</strong>{' '}
+                {user.email}
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+      {!databaseExists && (
+        <button onClick={handleCreateDB}>Create Database</button>
+      )}
+    </div>
+  );
+}
