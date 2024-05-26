@@ -22,7 +22,7 @@ git checkout sqlite
     "disks": [
         {
             "name": "database", 
-            "mountTo": db
+            "mountTo": "db"
         }
     ]
 }
