@@ -1,5 +1,5 @@
 // middleware/logger.js
-const logger = require('../utils/logger');
+const logger = require('@/utils/logger');
 
 export function middleware(req) {
   const { method, url } = req.nextUrl;

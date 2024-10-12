@@ -1,5 +1,5 @@
 // pages/api/hello.js
-import logger from '../../utils/logger';
+import logger from '@/utils/logger';
 
 export default function handler(req, res) {
   const userAgent = req.headers['user-agent'] || 'Unknown user-agent';
