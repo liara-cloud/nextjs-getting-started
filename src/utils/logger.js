@@ -8,14 +8,14 @@ const logFormat = printf(({ level, message, timestamp }) => {
 });
 
 const logger = createLogger({
-  level: 'info',  // Set default log level to 'info'
+  level: 'info',
   format: combine(
-    timestamp(),  // Include timestamp
-    logFormat     // Use the custom format
+    timestamp(),
+    logFormat
   ),
   transports: [
-    new transports.Console(),  // Log to the console
-    new transports.File({ filename: 'logs/app.log' })  // Log to a file
+    new transports.Console(),  // Log to console
+    new transports.File({ filename: 'logs/app.log' })  // Log to file
   ],
 });
 
