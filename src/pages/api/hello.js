@@ -1,5 +1,7 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+// pages/api/hello.js
+import logger from '../../utils/logger';
 
 export default function handler(req, res) {
-  res.status(200).json({ name: "John Doe" });
+  logger.info('API /hello endpoint was hit');
+  res.status(200).json({ message: 'Hello, world!' });
 }
