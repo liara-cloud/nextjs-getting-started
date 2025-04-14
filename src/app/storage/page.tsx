@@ -68,7 +68,7 @@ export default function FileManager() {
       <div className="flex gap-2 mb-4">
         <Input type="file" onChange={(e) => setFile(e.target.files?.[0] || null)} />
         <Button onClick={uploadFile} disabled={loading || !file}>
-          {loading ? 'Uploading...' : 'Uploading file'}
+          {loading ? 'Uploading...' : 'Upload file'}
         </Button>
       </div>
 
