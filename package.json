@@ -1,5 +1,5 @@
 {
-  "name": "upload-using-s3",
+  "name": "my-next-15-app",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,10 +9,25 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "aws-sdk": "^2.1531.0",
-    "axios": "^1.6.5",
-    "next": "14.0.4",
-    "react": "^18",
-    "react-dom": "^18"
+    "@aws-sdk/client-s3": "^3.787.0",
+    "@aws-sdk/s3-request-presigner": "^3.787.0",
+    "@radix-ui/react-slot": "^1.2.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.488.0",
+    "next": "15.3.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "sonner": "^2.0.3",
+    "tailwind-merge": "^3.2.0",
+    "tw-animate-css": "^1.2.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }

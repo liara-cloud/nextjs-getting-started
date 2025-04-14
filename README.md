@@ -1,32 +1,69 @@
-# NextJS apps getting started
+# S3 & NextJS 15
+A simple project using Liara S3 Compatible and NextJS 15
 
-An example of deploying a simple NextJS project on [Liara](https://liara.ir).
+## Production Mode
+- Clone the repository:
 
-## Deploying
-
-[Create New NextJS App](https://console.liara.ir/apps/create) & install the [Liara CLI](https://docs.liara.ir/cli/install)
-
-```bash
-$ git clone https://github.com/liara-cloud/nextjs-getting-started # or clone your own fork
-
-$ cd nextjs-getting-started
-
-$ liara deploy
 ```
-## Managing Bucket Using S3 - step by step
+https://github.com/liara-cloud/nextjs-getting-started.git 
+```
+
+- Change directory to `nextjs-getting-started`:
+
+```
+cd nextjs-getting-started
+```
+
+- Switch branch to `object-storage`:
+
+```
+git checkout object-storage
+```
+
+- [Create New NextJS App](https://console.liara.ir/apps/create) & install the [Liara CLI](https://docs.liara.ir/cli/install)
+
+- set ENVs on platform
+
+- Deploy the project on Liara:
+
+```
+liara deploy
+```
+
+## Development Mode
+- Clone the repository:
+
+```
+https://github.com/liara-cloud/nextjs-getting-started.git
+```
+
+- Change directory to `nextjs-getting-started`:
+
+```
+cd nextjs-getting-started
+```
+
+- Switch branch to `object-storage`:
+
+```
+git checkout object-storage
+```
+
+- Install dependencies:
+
 ```
 npm install
- ```
-- set your bucket informations in pages/index.js
-- or rename .env.example file to .env, then set your ENVs and use ENV variables in pages/index.js
 ```
- npm run dev
- ``` 
-### First look of projetc
-<img src="https://files.liara.ir/liara/nextjs/upload-file-using-s3-nextjs-bucket.png" alt="first look of nextjs-s3">
 
-### Features
-- upload file using s3
-- download file using s3
-- share links of uploaded files
-- remove file from bucket using s3
+- rename `.env.example` to `.env.local`
+
+- set ENVs in `.env.local`
+
+
+- Run the project: 
+
+```
+npm run dev
+```
+
+
